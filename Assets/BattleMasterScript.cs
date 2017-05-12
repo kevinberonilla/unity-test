@@ -8,6 +8,7 @@ public class BattleMasterScript : MonoBehaviour {
     private int beatChance;
     private int halfBeatChance;
     private int quarterBeatChance;
+    private int criticalChance;
     private float bpm;
     private float beatInterval;
     private float halfBeatInterval;
@@ -22,13 +23,13 @@ public class BattleMasterScript : MonoBehaviour {
         beatChance = 100;
         halfBeatChance = 30;
         quarterBeatChance = 10;
+        criticalChance = 10;
         bpm = 60.0f;
         beatInterval = 1 / (bpm / 60.0f);
         quarterBeatInterval = beatInterval / 4;
         beatCount = 0;
         
         InvokeRepeating("instantiateByChance", 0, quarterBeatInterval);
-//        InvokeRepeating("flashActiveArea", 0, beatInterval);
 	}
 	
 	void Update() {
@@ -49,31 +50,31 @@ public class BattleMasterScript : MonoBehaviour {
     -------------------------------------------------- */
     
     void instantiateByChance() {
-        int randomNumber = Random.Range(0, 100);
+        int roll = Random.Range(0, 100);
         bool instantiated = false;
         
         beatCount++;
         
         switch (beatCount) {
             case 1: // Beat
-                if (randomNumber <= beatChance) {
+                if (roll <= beatChance) {
                     instantiated = true;
                     cameraTransform.GetComponent<MainCameraScript>()
-                        .InstantiateActionIndicator();
+                        .InstantiateActionIndicator(criticalChance);
                 }
                 break;
             case 3: // Half beat
-                if (randomNumber <= halfBeatChance) {
+                if (roll <= halfBeatChance) {
                     instantiated = true;
                     cameraTransform.GetComponent<MainCameraScript>()
-                        .InstantiateActionIndicator();
+                        .InstantiateActionIndicator(criticalChance);
                 }
                 break;
             default: // Quarter beat
-                if (randomNumber <= quarterBeatChance) {
+                if (roll <= quarterBeatChance) {
                     instantiated = true;
                     cameraTransform.GetComponent<MainCameraScript>()
-                        .InstantiateActionIndicator();
+                        .InstantiateActionIndicator(criticalChance);
                 }
                 break;
         }
